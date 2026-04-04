@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Character
+public class PlayerController : Character
 {
     [SerializeField] private float mouseSensitivity = 1f;
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private Transform cameraTransform;
-    [SerializeField] private Camera playerCam;
 
+    private Camera playerCam;
     private float xRotation = 0f;
     private float yRotation = 0f;
     public override string description => "The lonely Sender";
+
+    public delegate void EmptyDelegate();
+    public delegate void IntDelegate(int x);
+
+    public event EmptyDelegate Shoot;
 
     void Start()
     {
@@ -34,6 +39,7 @@ public class Player : Character
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             DrawATKRay();
+            Shoot.Invoke();
             Attack();
         }
     }

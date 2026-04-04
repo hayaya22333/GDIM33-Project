@@ -13,12 +13,12 @@ public class Character : MonoBehaviour
     public int hp = 100;
     public virtual int atk => 30;
     public virtual string description => "This is a sample character";
-    public virtual float speed => 5f;
+    public virtual float speed => 3f;
 
     // Default methods that should exist in most characters
     public void Attack()
     {
-        Debug.Log("Dealt " + atk + " damage!");
+        //Debug.Log(gameObject.name + "dealt " + atk + " damage!");
     }
 
     public void Follow(GameObject target)
@@ -30,5 +30,13 @@ public class Character : MonoBehaviour
             target_pos,
             speed * Time.deltaTime
             );
+    }
+
+    public enum CharState
+    {
+        Idle,
+        Stun,
+        Chase,
+        Flee
     }
 }
