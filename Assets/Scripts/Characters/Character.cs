@@ -10,7 +10,7 @@ public class Character : MonoBehaviour
     [SerializeField] public Collider physicalCollider;
     [SerializeField] public Collider triggerCollider;
     [SerializeField] public Collider hitBox;
-    public virtual int hp => 100;
+    public int hp = 100;
     public virtual int atk => 30;
     public virtual string description => "This is a sample character";
     public virtual float speed => 5f;

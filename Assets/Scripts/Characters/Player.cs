@@ -7,6 +7,7 @@ public class Player : Character
     [SerializeField] private float mouseSensitivity = 1f;
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Camera playerCam;
 
     private float xRotation = 0f;
     private float yRotation = 0f;
@@ -15,6 +16,7 @@ public class Player : Character
     void Start()
     {
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+        playerCam = GetComponentInChildren<Camera>();
     }
 
     void Update()
@@ -31,6 +33,7 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            DrawATKRay();
             Attack();
         }
     }
@@ -63,5 +66,47 @@ public class Player : Character
 
     void Crouch()
     {
+    }
+/*
+    void DrawRay()
+    {
+        Ray playerRay = new Ray(playerCam.transform.position, playerCam.transform.forward);
+        Debug.DrawRay(playerCam.transform.position, playerCam.transform.forward * 20f, Color.red);
+        RaycastHit hit;
+
+        if (Physics.Raycast(playerRay, out hit))
+        {
+            // Debug.Log("Hitting " + hit.collider.name);
+            GameObject hitObject = hit.collider.gameObject;
+            switch (hitObject.tag)
+            {
+                case "Item":
+                // UI allow pickup
+                    break;
+                case "Enemy":
+                // Add aggro
+                    break;
+            }
+            if (hit.collider.TryGetComponent<IInteractable>(out var target))
+            {
+                AllowInteract(target);
+            }
+        }
+    }
+*/
+
+    void DrawATKRay()
+    {
+        Ray atkRay = new Ray(playerCam.transform.position, playerCam.transform.forward);
+        Debug.DrawRay(playerCam.transform.position, playerCam.transform.forward * 20f, Color.red);
+        RaycastHit hit;
+
+        if (Physics.Raycast(atkRay, out hit))
+        {
+            if (hit.collider.TryGetComponent<IInteractable>(out var target))
+            {
+                target.Interact();
+            }
+        }
     }
 }
