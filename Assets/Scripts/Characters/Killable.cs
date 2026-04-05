@@ -10,6 +10,14 @@ public class Killable : Character, IInteractable
     CharState state = CharState.Idle;
     GameObject target;
     PlayerController player;
+    private float stunTime = 1f;
+    private float positionLockTimer;
+
+    void Awake()
+    {
+        hp = 200;
+        speed = 2f;
+    }
 
     void Start()
     {
@@ -19,7 +27,19 @@ public class Killable : Character, IInteractable
 
     void Update()
     {
-        // Death condition
+        // Connect this to state machine!!
+        if (!positionLocked)
+        {
+            positionLockTimer = stunTime;
+        }
+        else
+        {
+            positionLockTimer -= Time.deltaTime;
+            if (positionLockTimer <= 0)
+            {
+                positionLocked = false;
+            }
+        }
         if (hp <= 0)
         {
             // Implement drops
@@ -48,6 +68,7 @@ public class Killable : Character, IInteractable
 
     void TakeHit(int dmg)
     {
+        positionLocked = true;
         hp -= dmg;
         Debug.Log(gameObject.name + " took " + dmg + " damage!");
 

@@ -14,23 +14,13 @@ public class Character : MonoBehaviour
     public int atk = 10;
     public int lvl = 1;
     public virtual string description => "This is a sample character";
-    public virtual float speed => 3f;
+    public float speed = 3f;
+    public bool positionLocked = false;
 
     // Default methods that should exist in most characters
     public void Attack()
     {
         //Debug.Log(gameObject.name + "dealt " + atk + " damage!");
-    }
-
-    public void Follow(GameObject target)
-    {
-        Vector3 target_pos = target.transform.position;
-        transform.LookAt(target_pos);
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            target_pos,
-            speed * Time.deltaTime
-            );
     }
 
     public enum CharState
@@ -39,5 +29,21 @@ public class Character : MonoBehaviour
         Flinch,
         Chase,
         Flee
+    }
+
+    public void Follow(GameObject target)
+    {
+        if (positionLocked)
+        {
+            return;
+        }
+
+        Vector3 target_pos = target.transform.position;
+        transform.LookAt(target_pos);
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            target_pos,
+            speed * Time.deltaTime
+            );
     }
 }
