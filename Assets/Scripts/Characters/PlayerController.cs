@@ -2,21 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This class should be connected to the Locator class.
+/// Controls player movements, attack, and stat updates.
+/// Invoke events with locator, therefore connects to AudioManager, GameController, Killable, etc.
+/// </summary>
 public class PlayerController : Character
 {
+    #region Variables
+
     [SerializeField] private float mouseSensitivity = 1f;
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private Transform cameraTransform;
 
-    private Camera playerCam;
-    private float xRotation = 0f;
-    private float yRotation = 0f;
-    public override string description => "The lonely Sender";
+    public override string description => "The lonely player";
+
+    public int playerEXP = 0;
+    public int killCnt = 0;
 
     public delegate void EmptyDelegate();
     public delegate void IntDelegate(int x);
 
     public event EmptyDelegate Shoot;
+    public event IntDelegate KilledEnemy;
+    public event IntDelegate LevelUp;
+
+    private Camera playerCam;
+    private float xRotation = 0f;
+    private float yRotation = 0f;
+
+    #endregion
+
+    #region StartUpdate
+
+    void Awake()
+    {
+        lvl = 1;
+        atk = 70;
+
+        LevelUp += HandleLevelUp;
+    }
 
     void Start()
     {
@@ -42,7 +67,17 @@ public class PlayerController : Character
             Shoot.Invoke();
             Attack();
         }
+
+        if (playerEXP >= 150)
+        {
+            playerEXP -= 150;
+            lvl += 1;
+            LevelUp.Invoke(lvl);
+        }
     }
+    #endregion
+
+    #region Movement
 
     void RotatePlayer()
     {
@@ -73,6 +108,27 @@ public class PlayerController : Character
     void Crouch()
     {
     }
+
+    #endregion
+
+    #region Connect
+
+    public void GetEXP(int exp)
+    {
+        Debug.Log("Player gained " + exp + "EXP!");
+        playerEXP += exp;
+
+        killCnt += 1;
+        KilledEnemy.Invoke(killCnt);
+    }
+    
+    public void HandleLevelUp(int lvl)
+    {
+        Debug.Log("Player reached lvl " + lvl);
+    }
+    #endregion
+
+    #region Actions
 /*
     void DrawRay()
     {
@@ -115,4 +171,6 @@ public class PlayerController : Character
             }
         }
     }
+    #endregion
+
 }

@@ -11,7 +11,8 @@ public class Character : MonoBehaviour
     [SerializeField] public Collider triggerCollider;
     [SerializeField] public Collider hitBox;
     public int hp = 100;
-    public virtual int atk => 30;
+    public int atk = 10;
+    public int lvl = 1;
     public virtual string description => "This is a sample character";
     public virtual float speed => 3f;
 
@@ -35,7 +36,7 @@ public class Character : MonoBehaviour
     public enum CharState
     {
         Idle,
-        Stun,
+        Flinch,
         Chase,
         Flee
     }

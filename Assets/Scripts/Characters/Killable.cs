@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class Killable : Character, IInteractable
 {
-    [SerializeField] private GameObject target;
     [SerializeField] public List<GameObject> itemDrops;
     [SerializeField] private int expDrop = 100;
+
     CharState state = CharState.Idle;
+    GameObject target;
+    PlayerController player;
 
-    // Events
-    public delegate void EmptyDelegate();
-    public delegate void IntDelegate(int x);
-
-    //public event IntDelegate EnemyKilled;
+    void Start()
+    {
+        player = Locator.Instance.Player;
+        target = player.gameObject;
+    }
 
     void Update()
     {
@@ -21,8 +23,6 @@ public class Killable : Character, IInteractable
         if (hp <= 0)
         {
             // Implement drops
-            //EnemyKilled.Invoke(expDrop);
-            Debug.Log("Gained " + expDrop + "EXP!");
             Debug.Log("Killed " + gameObject.name);
             // Insert death protocol here.
             Die();
@@ -42,6 +42,7 @@ public class Killable : Character, IInteractable
     void Die()
     {
         rb.constraints = ~RigidbodyConstraints.FreezeAll;
+        player.GetEXP(expDrop);
         Destroy(this);
     }
 
@@ -63,7 +64,7 @@ public class Killable : Character, IInteractable
 
     public void Interact()
     {
-        TakeHit(50);
+        TakeHit(player.atk);
     }
 
     public string GetDescription()
