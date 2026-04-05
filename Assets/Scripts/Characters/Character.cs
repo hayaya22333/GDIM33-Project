@@ -6,15 +6,23 @@ using UnityEngine;
 public class Character : MonoBehaviour
 {
     // Default stats that should exist in all characters
-    [SerializeField] public Rigidbody rb;
-    [SerializeField] public Collider physicalCollider;
-    [SerializeField] public Collider triggerCollider;
-    [SerializeField] public Collider hitBox;
+    [Header("Physics Setting")]
+    public Rigidbody rb;
+    [SerializeField] Collider physicalCollider;
+    [SerializeField] Collider triggerCollider;
+    [SerializeField] Collider hitBox;
+
+    [Header("Stored Info")]
+    [SerializeField] List<string> dialogues;
+
+    [Header("Stats Setting")]
     public int hp = 100;
     public int atk = 10;
     public int lvl = 1;
-    public virtual string description => "This is a sample character";
     public float speed = 3f;
+    public virtual string description => "This is a sample character";
+
+    [Header("Status")]
     public bool positionLocked = false;
 
     // Default methods that should exist in most characters

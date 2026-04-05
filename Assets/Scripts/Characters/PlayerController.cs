@@ -11,6 +11,7 @@ public class PlayerController : Character
 {
     #region Variables
 
+    [Header("Player Properties")]
     [SerializeField] private float mouseSensitivity = 1f;
     [SerializeField] private float jumpForce = 4f;
     [SerializeField] private Transform cameraTransform;
@@ -18,7 +19,7 @@ public class PlayerController : Character
     public override string description => "The lonely player";
 
     public int playerEXP = 0;
-    public int killCnt = 0;
+    public int killCount = 0;
 
     public delegate void EmptyDelegate();
     public delegate void IntDelegate(int x);
@@ -118,8 +119,8 @@ public class PlayerController : Character
         Debug.Log("Player gained " + exp + "EXP!");
         playerEXP += exp;
 
-        killCnt += 1;
-        KilledEnemy.Invoke(killCnt);
+        killCount += 1;
+        KilledEnemy.Invoke(killCount);
     }
     
     public void HandleLevelUp(int lvl)
@@ -167,7 +168,7 @@ public class PlayerController : Character
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var target))
             {
-                target.Interact();
+                target.Damage(atk, gameObject.name);
             }
         }
     }

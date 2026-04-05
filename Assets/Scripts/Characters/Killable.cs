@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Killable : Character, IInteractable
 {
+    [Header("Enemy Properties")]
     [SerializeField] public List<GameObject> itemDrops;
     [SerializeField] private int expDrop = 100;
 
     CharState state = CharState.Idle;
     GameObject target;
     PlayerController player;
-    private float stunTime = 1f;
+    private float stunTime = 0.5f;
     private float positionLockTimer;
 
     void Awake()
@@ -66,15 +67,6 @@ public class Killable : Character, IInteractable
         Destroy(this);
     }
 
-    void TakeHit(int dmg)
-    {
-        positionLocked = true;
-        hp -= dmg;
-        Debug.Log(gameObject.name + " took " + dmg + " damage!");
-
-        state = CharState.Chase;
-    }
-
     void DropItems()
     {
         foreach (GameObject item in itemDrops)
@@ -83,9 +75,13 @@ public class Killable : Character, IInteractable
         }
     }
 
-    public void Interact()
+    public void Damage(int dmg, string dmgSource)
     {
-        TakeHit(player.atk);
+        positionLocked = true;
+        hp -= dmg;
+        Debug.Log(gameObject.name + " took " + dmg + " damage from" + dmgSource + "!!");
+
+        state = CharState.Chase;
     }
 
     public string GetDescription()
