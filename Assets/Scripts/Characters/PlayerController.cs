@@ -18,6 +18,7 @@ public class PlayerController : Character
 
     public override string description => "The lonely player";
 
+    public int maxEXP = 300;
     public int playerEXP = 0;
     public int killCount = 0;
 
@@ -69,9 +70,9 @@ public class PlayerController : Character
             Attack();
         }
 
-        if (playerEXP >= 150)
+        if (playerEXP >= maxEXP)
         {
-            playerEXP -= 150;
+            playerEXP -= maxEXP;
             lvl += 1;
             LevelUp.Invoke(lvl);
         }
@@ -168,7 +169,7 @@ public class PlayerController : Character
         {
             if (hit.collider.TryGetComponent<IInteractable>(out var target))
             {
-                target.Damage(atk, gameObject.name);
+                target.TakeDamage(atk, gameObject.name);
             }
         }
     }

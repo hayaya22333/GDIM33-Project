@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Killable : Character, IInteractable
+public class Killable : Character
 {
     [Header("Enemy Properties")]
     [SerializeField] public List<GameObject> itemDrops;
     [SerializeField] private int expDrop = 100;
+    [SerializeField] private GameObject damagePopupPrefab;
 
     CharState state = CharState.Idle;
     GameObject target;
     PlayerController player;
-    private float stunTime = 0.5f;
+    private float stunTime = 0.2f;
     private float positionLockTimer;
 
     void Awake()
@@ -64,6 +65,8 @@ public class Killable : Character, IInteractable
     {
         rb.constraints = ~RigidbodyConstraints.FreezeAll;
         player.GetEXP(expDrop);
+
+        physicalCollider.enabled = false;
         Destroy(this);
     }
 
@@ -75,13 +78,17 @@ public class Killable : Character, IInteractable
         }
     }
 
-    public void Damage(int dmg, string dmgSource)
+    public void HandleDamage(int dmg, string dmgSource, string damagedPart)
     {
         positionLocked = true;
         hp -= dmg;
-        Debug.Log(gameObject.name + " took " + dmg + " damage from" + dmgSource + "!!");
+        Debug.Log(gameObject.name + "'s " + damagedPart + " took " + dmg + " damage from " + dmgSource + "!!");
 
         state = CharState.Chase;
+
+        // Visual feedback
+        DamagePopUp popUp = Instantiate(damagePopupPrefab, transform.position, transform.rotation).GetComponent<DamagePopUp>();
+        popUp.PopNum(dmg);
     }
 
     public string GetDescription()

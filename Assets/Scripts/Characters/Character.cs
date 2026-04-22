@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
     // Default stats that should exist in all characters
     [Header("Physics Setting")]
     public Rigidbody rb;
-    [SerializeField] Collider physicalCollider;
+    [SerializeField] protected Collider physicalCollider;
     [SerializeField] Collider triggerCollider;
     [SerializeField] Collider hitBox;
 

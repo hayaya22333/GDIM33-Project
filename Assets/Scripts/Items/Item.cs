@@ -13,7 +13,7 @@ public class Item : MonoBehaviour, IInteractable
         Destroy(gameObject);
     }
 
-    public void Damage(int dmg, string source)
+    public void TakeDamage(int dmg, string source)
     {
         durability -= dmg;
         Debug.Log(gameObject.name + "'s durability reduced.");

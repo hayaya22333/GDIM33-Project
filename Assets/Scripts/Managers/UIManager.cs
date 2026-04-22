@@ -5,22 +5,26 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] GameObject levelTextObject;
+    [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI expProgressionText;
     [SerializeField] GameObject lvlUpTextObject;
-    TextMeshProUGUI levelText;
+    [SerializeField] PlayerController player;
 
     void Start()
     {
-        levelText = levelTextObject.GetComponent<TextMeshProUGUI>();
-        Locator.Instance.Player.LevelUp += HandleLevelUp;
+        player = Locator.Instance.Player;
+        player.LevelUp += HandleLevelUp;
+    }
 
-
+    void Update()
+    {
+        expProgressionText.text = player.playerEXP + "/" + player.maxEXP;
     }
 
     void HandleLevelUp(int lvl)
     {
         levelText.text = "Level " + lvl;
         Instantiate(lvlUpTextObject,
-                    levelTextObject.transform.parent);
+                    levelText.gameObject.transform.parent);
     }
 }
